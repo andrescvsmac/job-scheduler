@@ -1,0 +1,3 @@
+# Job Scheduler with Retries and Backoff
+
+Implement a minimal job scheduler with retries and backoff. A `job` can be represented as any callable or function along with some metadata, and your scheduler should support scheduling jobs to run either immediately or at a specific time in the future. Each job can optionally specify a maximum number of retry attempts and a simple backoff interval in seconds. Your scheduler should maintain a set of pending jobs, periodically check (polling) which ones are due, execute them, and—if a job fails—retry it according to its configured limits and backoff delay.
