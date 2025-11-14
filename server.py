@@ -165,8 +165,8 @@ class SchedulerDashboardHandler(BaseHTTPRequestHandler):
         def delayed_task():
             print(f"[{datetime.now().strftime('%H:%M:%S')}] Delayed job executed!")
             time.sleep(0.3)
-            self.stats['completed'] += 1
-            self.stats['executions'] += 1
+            self.stats.increment('completed')
+            self.stats.increment('executions')
 
         job = Job(
             func=delayed_task,
@@ -207,8 +207,8 @@ class SchedulerDashboardHandler(BaseHTTPRequestHandler):
             def batch_task(task_num=i):
                 print(f"[{datetime.now().strftime('%H:%M:%S')}] Batch task {task_num} completed")
                 time.sleep(0.2)
-                self.stats['completed'] += 1
-                self.stats['executions'] += 1
+                self.stats.increment('completed')
+                self.stats.increment('executions')
 
             job = Job(
                 func=batch_task,
