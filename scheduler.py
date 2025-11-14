@@ -58,20 +58,21 @@ class JobScheduler:
 
     def start(self):
         """
-        TODO: Implement this method.
-
         Start the scheduler in a background thread.
+
         - Check if already running
         - Set running flag
         - Clear stop event
         - Create and start daemon thread running _run()
         """
-        raise NotImplementedError("Needs to implement start()")
+        self.running = True
+        self.stop_event.clear()
+        self.scheduler_thread = Thread(target=self._run, daemon=True)
+        self.scheduler_thread.start()
+        self.logger.info("Scheduler started")
 
     def stop(self, wait: bool = True):
         """
-        TODO: Implement this method.
-
         Stop the scheduler gracefully.
         - Set running to False
         - Signal stop event
@@ -80,7 +81,16 @@ class JobScheduler:
         Args:
             wait: If True, wait for the scheduler thread to finish
         """
-        raise NotImplementedError("Needs to implement stop()")
+        if not self.running:
+            return
+
+        self.running = False
+        self.stop_event.set()
+
+        if wait and self.scheduler_thread:
+            self.scheduler_thread.join()
+
+        self.logger.info("Scheduler stopped")
 
     def _run(self):
         """
@@ -93,7 +103,20 @@ class JobScheduler:
         - Execute due jobs (outside the lock)
         - Wait for poll_interval before next iteration
         """
-        raise NotImplementedError("Needs to implement _run()")
+        while self.running:
+            current_time = datetime.now()
+
+            # Find and execute due jobs
+            jobs_to_execute = []
+
+            # TODO: Implement job fetching logic
+
+            # Execute jobs outside the lock to avoid blocking
+            for job in jobs_to_execute:
+                self._execute_job(job)
+
+            # Wait before next poll
+            self.stop_event.wait(self.poll_interval)
 
     def _execute_job(self, job: Job):
         """
@@ -109,6 +132,8 @@ class JobScheduler:
         Args:
             job: The job to execute
         """
+        self.logger.info(f"Executing {job}")
+
         raise NotImplementedError("Needs to implement _execute_job()")
 
     def _remove_job(self, job: Job):

@@ -16,7 +16,7 @@ job-scheduler/
 ```
 
 - `job.py` - 3 methods to implement
-- `scheduler.py` - 6 methods to implement
+- `scheduler.py` - 4 methods to implement
 
 ## API Reference
 
